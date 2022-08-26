@@ -1,4 +1,5 @@
 #!bin/bash
+set -euxo pipefail
 
 # ENVS:
 # GIT_DESTINATION
