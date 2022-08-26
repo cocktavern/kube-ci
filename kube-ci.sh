@@ -12,7 +12,7 @@ ssh-keyscan -H github.com >> /root/.ssh/known_hosts
 git clone $GIT_REPO
 
 
-APPLY_PATH=$(pwd)/${GIT_DESTINATION}
+APPLY_PATH=$(pwd)/${KUBE_MANIFEST_PATH}
 while true;
 do
 echo -n "Applying ${APPLY_PATH}";
