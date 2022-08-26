@@ -1,9 +1,9 @@
 #!bin/bash
 
 # ENVS:
-    # GIT_DESTINATION
-    # GIT_REPO
-    # KUBE_MANIFEST_PATH
+# GIT_DESTINATION
+# GIT_REPO
+# KUBE_MANIFEST_PATH
 
 mkdir -p $GIT_DESTINATION
 cd $GIT_DESTINATION
@@ -15,10 +15,17 @@ git clone $GIT_REPO
 APPLY_PATH=$(pwd)/${KUBE_MANIFEST_PATH}
 while true;
 do
-echo -n "Applying ${APPLY_PATH}";
-date;
+    echo -n "[ DATE ] $(date) \n";
 
-kubectl apply -k ${APPLY_PATH}
+    echo -n "[ GITHUB ] Pulling latest \n";
+    git pull
+    echo -n "\n";
+    echo -n "\n";
 
-sleep 60;
+    echo -n "[ K8s ] kubectl apply -k ${APPLY_PATH} \n";
+    kubectl apply -k ${APPLY_PATH}
+    echo -n "\n";
+    echo -n "\n";
+
+    sleep 60;
 done
