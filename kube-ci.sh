@@ -9,7 +9,7 @@ set -e
 
 ## 1. Prepare Credentials
 mkdir -p /root/.ssh
-cp -R $GIT_SSH_FOLDER /root/.ssh
+cp -R $GIT_SSH_FOLDER/* /root/.ssh
 ssh-keyscan -H github.com >> /root/.ssh/known_hosts
 
 ## 2. Clone repo
