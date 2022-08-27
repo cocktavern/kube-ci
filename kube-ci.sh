@@ -9,14 +9,14 @@ set -e
 
 ## 1. Prepare Credentials
 mkdir -p /root/.ssh
-cp -R $GIT_SSH_FOLDER/* /root/.ssh
+cp -a $GIT_SSH_FOLDER/. /root/.ssh
 ssh-keyscan -H github.com >> /root/.ssh/known_hosts
 
 ## 2. Clone repo
+echo -n "[ INFO ] $GIT_DESTINATION \n";
 mkdir -p $GIT_DESTINATION
 cd $GIT_DESTINATION
 git clone $GIT_REPO
-
 
 ## 3. Pull and apply loop
 APPLY_PATH=$(pwd)/${KUBE_MANIFEST_PATH}
@@ -25,6 +25,8 @@ do
     echo -n "[ DATE ] $(date) \n";
     
     echo -n "[ GITHUB ] Pulling latest \n";
+    cd $APPLY_PATH
+    pwd
     git pull
     echo -n "\n";
     echo -n "\n";
