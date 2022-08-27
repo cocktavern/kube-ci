@@ -23,16 +23,17 @@ APPLY_PATH=$(pwd)/${KUBE_MANIFEST_PATH}
 while true;
 do
     echo -n "[ DATE ] $(date) \n";
+    echo -n "\n";
     
     echo -n "[ GITHUB ] Pulling latest \n";
     cd $APPLY_PATH
     pwd
     git pull
     echo -n "\n";
-    echo -n "\n";
     
     echo -n "[ K8s ] kubectl apply -k ${APPLY_PATH} \n";
-    kubectl apply -k ${APPLY_PATH}
+    kubectl apply --prune -k ${APPLY_PATH}
+    echo -n "------------------------------------------";
     echo -n "\n";
     echo -n "\n";
     
