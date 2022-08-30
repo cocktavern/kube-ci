@@ -3,6 +3,9 @@ DOCKER_CONTAINER_NAME=kube-ci
 DOCKER_REPOSITORY=$(DOCKER_NAMESPACE)/$(DOCKER_CONTAINER_NAME)
 DOCKER_PLATFORM=linux/arm64
 
+debug: local-docker-build
+	sh debug.sh
+	
 local-docker-build:
 	docker build --rm \
 		--build-arg DOCKER_PLATFORM=$(DOCKER_PLATFORM) \

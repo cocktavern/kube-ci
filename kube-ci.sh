@@ -2,40 +2,65 @@
 set -e
 
 # ENVS:
-# GIT_DESTINATION
-# GIT_REPO
-# KUBE_MANIFEST_PATH
-# GIT_SSH_FOLDER
+# GIT_DESTINATION e.g. /workspace
+# GIT_REPO  e.g git@github.com:cocktavern/kubernetes.git
+# KUBE_MANIFEST_PATH e.g. kubernetes/dev-raspberry
+# GIT_SSH_FOLDER e.g. /git-ssh
+# KUBECTL_OPTIONS e.g. "--prune --all"
 
 ## 1. Prepare Credentials
+echo -n "------------------------------------------";
+echo -n "------------------------------------------ \n";
+echo -n "[ INFO ] PREPARE CREDENTIALS \n";
 mkdir -p /root/.ssh
 cp -a $GIT_SSH_FOLDER/. /root/.ssh
 ssh-keyscan -H github.com >> /root/.ssh/known_hosts
+echo -n "------------------------------------------";
+echo -n "------------------------------------------ \n";
 
 ## 2. Clone repo
+echo -n "------------------------------------------";
+echo -n "------------------------------------------ \n";
+echo -n "[ INFO ] CLONE REPO \n";
 echo -n "[ INFO ] $GIT_DESTINATION \n";
 mkdir -p $GIT_DESTINATION
 cd $GIT_DESTINATION
-git clone $GIT_REPO
+
+APPLY_PATH=$(pwd)/${KUBE_MANIFEST_PATH}
+if [ -d $APPLY_PATH ]
+then
+    echo -n "[ GIT ] $APPLY_PATH Cloned already \n"
+else
+    echo -n "[ GIT ] $APPLY_PATH Cloning \n"
+    git clone $GIT_REPO
+fi
+echo -n "------------------------------------------";
+echo -n "------------------------------------------ \n";
 
 ## 3. Pull and apply loop
-APPLY_PATH=$(pwd)/${KUBE_MANIFEST_PATH}
 while true;
 do
+    echo -n "------------------------------------------";
+    echo -n "------------------------------------------ \n";
+    echo -n "[ INFO ] PULL AND APPLY \n";
     echo -n "[ DATE ] $(date) \n";
     echo -n "\n";
     
-    echo -n "[ GITHUB ] Pulling latest \n";
+    echo -n "[ GIT ] Pulling latest \n";
     cd $APPLY_PATH
     pwd
     git pull
     echo -n "\n";
     
-    echo -n "[ K8s ] kubectl apply -k ${APPLY_PATH} \n";
-    kubectl apply --prune -k ${APPLY_PATH}
+    echo -n "[ K8A ] kubectl apply -k ${APPLY_PATH} \n";
+    if [ ! -z "$KUBECTL_OPTIONS" ]
+    then
+        kubectl apply ${KUBECTL_OPTIONS} -k ${APPLY_PATH}
+    else
+        kubectl apply -k ${APPLY_PATH}
+    fi
     echo -n "------------------------------------------";
-    echo -n "\n";
-    echo -n "\n";
+    echo -n "------------------------------------------ \n";
     
     sleep 60;
 done
