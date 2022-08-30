@@ -7,7 +7,7 @@ WORKDIR /root/
 ADD . /root/
 
 RUN apt-get update && \
-    apt-get install -y git curl
+    apt-get install -y git curl wget gnupg gnupg2 gnupg1 git-secret
 
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/${DOCKER_PLATFORM}/kubectl"
 
