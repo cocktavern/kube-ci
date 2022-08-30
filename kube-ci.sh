@@ -31,7 +31,7 @@ cd $GIT_DESTINATION
 APPLY_PATH=$(pwd)/${KUBE_MANIFEST_PATH}
 if [ -d $APPLY_PATH ]
 then
-    echo -n "[ GIT ] $APPLY_PATH Cloned already \n"
+    echo -n "[ GIT ] $APPLY_PATH Already Cloned \n"
 else
     echo -n "[ GIT ] $APPLY_PATH Cloning \n"
     git clone $GIT_REPO
@@ -67,7 +67,7 @@ do
     git secret reveal -p "$GPG_PASSPHRASE"
     echo -n "\n";
     
-    echo -n "[ K8A ] kubectl apply ${KUBECTL_OPTIONS} -k ${APPLY_PATH} \n";
+    echo -n "[ K8S ] kubectl apply ${KUBECTL_OPTIONS} -k ${APPLY_PATH} \n";
     if [ ! -z "$KUBECTL_OPTIONS" ]
     then
         kubectl apply ${KUBECTL_OPTIONS} -k ${APPLY_PATH}
