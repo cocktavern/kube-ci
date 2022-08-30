@@ -7,6 +7,8 @@ set -e
 # KUBE_MANIFEST_PATH e.g. kubernetes/dev-raspberry
 # GIT_SSH_FOLDER e.g. /git-ssh
 # KUBECTL_OPTIONS e.g. "--prune --all"
+# GPG_PRIVATE_KEY_PATH e.g. /volume-mount/private.key
+# GPG_PASSPHRASE e.g. my-secret-01
 
 ## 1. Prepare Credentials
 echo -n "------------------------------------------";
@@ -34,10 +36,21 @@ else
     echo -n "[ GIT ] $APPLY_PATH Cloning \n"
     git clone $GIT_REPO
 fi
+
+# 3. Decrypt secrets
+echo -n "------------------------------------------";
+echo -n "------------------------------------------ \n";
+echo -n "[ GIT SECRET ] IMPORT KEY \n";
+cd $APPLY_PATH
+gpg --batch --yes --pinentry-mode loopback --import $GPG_PRIVATE_KEY_PATH
+
+echo -n "[ GIT SECRET ] REVEAL SECRETS \n";
+git secret list
+git secret reveal -p "$GPG_PASSPHRASE"
 echo -n "------------------------------------------";
 echo -n "------------------------------------------ \n";
 
-## 3. Pull and apply loop
+## 4. Pull and apply loop
 while true;
 do
     echo -n "------------------------------------------";
@@ -50,6 +63,8 @@ do
     cd $APPLY_PATH
     pwd
     git pull
+    git secret list
+    git secret reveal -p "$GPG_PASSPHRASE"
     echo -n "\n";
     
     echo -n "[ K8A ] kubectl apply ${KUBECTL_OPTIONS} -k ${APPLY_PATH} \n";
