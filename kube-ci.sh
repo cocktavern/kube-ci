@@ -45,7 +45,6 @@ cd $APPLY_PATH
 gpg --batch --yes --pinentry-mode loopback --import $GPG_PRIVATE_KEY_PATH
 
 echo -n "[ GIT SECRET ] REVEAL SECRETS \n";
-git secret list
 git secret reveal -p "$GPG_PASSPHRASE"
 echo -n "------------------------------------------";
 echo -n "------------------------------------------ \n";
