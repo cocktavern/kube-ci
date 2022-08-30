@@ -52,7 +52,7 @@ do
     git pull
     echo -n "\n";
     
-    echo -n "[ K8A ] kubectl apply -k ${APPLY_PATH} \n";
+    echo -n "[ K8A ] kubectl apply ${KUBECTL_OPTIONS} -k ${APPLY_PATH} \n";
     if [ ! -z "$KUBECTL_OPTIONS" ]
     then
         kubectl apply ${KUBECTL_OPTIONS} -k ${APPLY_PATH}
